@@ -1,9 +1,13 @@
+"""
+tutorial4.py
+by E. Dennison
+"""
 from ggame import App, RectangleAsset, ImageAsset, Sprite, LineStyle, Color, Frame
 
 SCREEN_WIDTH = 640
 SCREEN_HEIGHT = 480
 
-# Background
+
 class SpaceShip(Sprite):
     """
     Animated space ship
@@ -13,14 +17,16 @@ class SpaceShip(Sprite):
 
     def __init__(self, position):
         super().__init__(SpaceShip.asset, position)
-        self.vx = 1
-        self.vy = 1
-        self.vr = 0.01
+        self.vx = .5
+        self.vy = 0
+        self.vr = 0.00
         self.thrust = 0
         self.thrustframe = 1
         SpaceGame.listenKeyEvent("keydown", "space", self.thrustOn)
         SpaceGame.listenKeyEvent("keyup", "space", self.thrustOff)
-        
+        SpaceGame.listenKeyEvent("keyleaft" , "a" , self.rotationLEFT)
+        self.fxcenter = self.fycenter = 0.5
+
     def step(self):
         self.x += self.vx
         self.y += self.vy
@@ -32,14 +38,19 @@ class SpaceShip(Sprite):
                 self.thrustframe = 1
         else:
             self.setImage(0)
+        
     
+    def rotationLEFT(self, event):
+        self.rotation = slef.vr = 1
+     
     def thrustOn(self, event):
         self.thrust = 1
 
     def thrustOff(self, event):
         self.thrust = 0
+  
 
-            
+
 
 class SpaceGame(App):
     """
@@ -49,19 +60,16 @@ class SpaceGame(App):
         super().__init__(width, height)
         black = Color(0, 1)
         noline = LineStyle(0, black)
-        bg_asset = RectangleAsset(SCREEN_WIDTH, SCREEN_HEIGHT, noline, black)
+        bg_asset = RectangleAsset(width, height, noline, black)
         bg = Sprite(bg_asset, (0,0))
-        SpaceShip((100,100))
-        SpaceShip((150,150))
-        SpaceShip((200,50))
-    
-    
-        
+        SpaceShip((100,200))
+        SpaceShip((300,200))
+        SpaceShip((200,200))
+        SpaceShip((600, 450))
     def step(self):
         for ship in self.getSpritesbyClass(SpaceShip):
             ship.step()
 
-   
+
 myapp = SpaceGame(SCREEN_WIDTH, SCREEN_HEIGHT)
 myapp.run()
-
